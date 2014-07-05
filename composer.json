@@ -1,0 +1,35 @@
+{
+    "name": "scriptotek/oai-client",
+    "type": "library",
+    "description": "Package for making Search/Retrieve via URL requests and parse the responses",
+    "homepage": "http://github.com/scriptotek/oai-client",
+    "keywords": ["oai"],
+    "require": {
+        "danmichaelo/quitesimplexmlelement": "~0.2",
+        "guzzle/guzzle": "~3.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "satooshi/php-coveralls": "~0.6",
+        "mockery/mockery": "~0.9",
+        "sami/sami": "~1.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Michael O. Heggø",
+            "email": "danmichaelo@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Scriptotek\\Oai\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scriptotek\\Oai\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev"
+}

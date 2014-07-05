@@ -1,0 +1,164 @@
+<?php namespace Scriptotek\Oai;
+
+use \Guzzle\Http\Client as HttpClient;
+
+/**
+ * When iterating, methods are called in the following order:
+ * 
+ * rewind()
+ * valid()
+ * current()
+ *
+ * next()
+ * valid()
+ * current()
+ *
+ * ...
+ *
+ * next()
+ * valid()
+ */
+class Records implements \Iterator {
+
+	/** @var HttpClient */
+	protected $httpClient;
+
+	private $from;
+	private $until;
+	private $set;
+	private $client;
+	private $extraParams;
+	private $lastResponse;
+
+	private $position;
+
+    /** @var int Total number of records in the result set */
+    public $numberOfRecords;
+
+	private $data = array();
+
+    /**
+     * Create a new records iterator
+     *
+     * @param string $from Start date
+     * @param string $until End date
+     * @param string $set Data set
+     * @param Client $client OAI client reference
+     * @param array $extraParams Extra GET parameters (optional)
+     * @param mixed $httpClient A http client (optional)
+     */
+	public function __construct($from, $until, $set, Client $client, $count = 10, $extraParams = array(), $httpClient = null) {
+		$this->from = $from;
+		$this->until = $until;
+		$this->set = $set;
+		$this->client = $client;
+		$this->extraParams = $extraParams;
+		$this->httpClient = $httpClient ?: new HttpClient;
+		$this->position = 1;
+		$this->fetchMore();
+	}
+
+	/**
+     * Return error message from last reponse, if any
+     *
+     * @return string|null
+     */
+	function __get($prop) {
+		if ($prop == 'error') {
+			return $this->lastResponse->error;
+		}
+	}
+
+	/**
+     * Fetch more records from the service
+     */
+	private function fetchMore()
+	{
+		$args = array(
+			'from' => $this->from,
+			'until' => $this->until,
+			'set' => $this->set,
+		);
+		if (isset($this->resumptionToken)) {
+			$args['resumptionToken'] = $this->resumptionToken;
+		}
+		$url = $this->client->urlBuilder('ListRecords', $args);
+
+		$options = $this->client->getHttpOptions();
+
+		$res = $this->httpClient->get($url, $options)->send();
+		$body = $res->getBody(true);
+		$this->lastResponse = new ListRecordsResponse($body);
+		$this->data = $this->lastResponse->records;
+		if (isset($this->lastResponse->numberOfRecords) && !is_null($this->lastResponse->numberOfRecords)) {
+			$this->numberOfRecords = $this->lastResponse->numberOfRecords;
+		} else if (!isset($this->numberOfRecords)) {
+			$this->numberOfRecords = count($this->lastResponse->records);
+		}
+
+	}
+
+	/**
+     * Return the current element
+     *
+     * @return mixed
+     */
+	function current() {
+		return $this->data[0];
+	}
+
+	/**
+     * Return the key of the current element
+	 *
+     * @return int
+     */
+	function key() {
+		return $this->position;
+	}
+
+	/**
+     * Rewind the Iterator to the first element
+     */
+	function rewind() {
+		if ($this->position != 1) {
+			$this->position = 1;
+			$this->data = array();
+			$this->fetchMore();
+		}
+	}
+
+	/**
+     * Move forward to next element
+     */
+	function next() {
+
+		if (count($this->data) > 0) {
+			array_shift($this->data);
+		}
+		++$this->position;
+
+		if ($this->position > $this->numberOfRecords) {
+			return null;
+		}
+
+		if (count($this->data) == 0) {
+			$this->fetchMore();
+		}
+
+		if (count($this->data) == 0) {
+			return null;
+		}
+
+
+	}
+
+	/**
+     * Check if current position is valid
+	 *
+     * @return bool
+     */
+	function valid() {
+		return count($this->data) != 0;
+	}
+
+}
