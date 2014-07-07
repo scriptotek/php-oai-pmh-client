@@ -1,3 +1,6 @@
+[![Build Status](https://img.shields.io/travis/scriptotek/php-oai-client.svg)](https://travis-ci.org/scriptotek/php-oai-client)
+[![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-oai-client.svg)](https://coveralls.io/r/scriptotek/php-oai-client?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scriptotek/php-oai-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scriptotek/php-oai-client/?branch=master)
 
 ## php-oai-client
 
