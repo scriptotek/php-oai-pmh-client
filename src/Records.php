@@ -64,8 +64,8 @@ class Records implements \Iterator {
      * @return string|null
      */
 	function __get($prop) {
-		if ($prop == 'error') {
-			return $this->lastResponse->error;
+		if (in_array($prop, array('error', 'errorCode'))) { 
+			return $this->lastResponse->{$prop};
 		}
 	}
 

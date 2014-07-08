@@ -5,6 +5,9 @@
  */
 class GetRecordResponse extends Response {
 
+    /** @var string Error code */
+    public $errorCode;
+
     /** @var string Error message */
     public $error;
 

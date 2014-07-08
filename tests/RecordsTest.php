@@ -12,6 +12,14 @@ class RecordsTest extends TestCase {
             {{resumptionToken}}
         </ListRecords>';
 
+    protected $errorResponse = '<?xml version="1.0" encoding="UTF-8" ?>
+		 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"> 
+		   <responseDate>2014-07-08T14:47:07Z</responseDate> 
+		  <request>oai.bibsys.no/oai/repository</request> 
+		  <error code="badArgument">unknown set name: norgessoks</error> 
+		</OAI-PMH>
+		';
+
 	/**
      *  numberOfRecords : Total number of records in response
      */
@@ -74,6 +82,24 @@ class RecordsTest extends TestCase {
 			$i++;
 		}
 		$this->assertEquals($n, $i);
+	}
+
+
+	public function testErrorResponse()
+	{
+		$uri = 'http://localhost';
+		$args = array(
+			'from' => '2012-01-01',
+			'until' => '2012-01-02',
+			'set' => 'Dummy',
+		);
+        $http = $this->httpMockSingleResponse($this->errorResponse);
+
+		$client = new Client($uri);
+		$records = new Records($args['from'], $args['until'], $args['set'], $client, 10, array(), $http);
+
+		$this->assertEquals('unknown set name: norgessoks', $records->error);
+		$this->assertEquals('badArgument', $records->errorCode);
 	}
 
 	/*public function testMultipleRequests()

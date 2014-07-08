@@ -5,6 +5,22 @@
  */
 class ListRecordsResponse extends Response {
 
+    /** @var string Error code 
+     *  Possible error codes:
+     *      badArgument
+     *      badResumptionToken
+     *      badVerb
+     *      cannotDisseminateFormat
+     *      idDoesNotExist
+     *      noRecordsMatch
+     *      noMetaDataFormats
+     *      noSetHierarchy
+     */
+    public $errorCode;
+
+    /** @var string Error message */
+    public $error;
+ 
     /** @var Record[] Array of records */
     public $records;
 
@@ -27,21 +43,25 @@ class ListRecordsResponse extends Response {
     {
         parent::__construct($text, $client);
 
-        $main = $this->response->first('/oai:OAI-PMH/oai:ListRecords');
+        $err = $this->response->first('/oai:OAI-PMH/oai:error');
+        $this->error = $err ? $err->text() : null;
+        $this->errorCode = $err ? $err->attr('code') : null;
 
         $this->records = array();
+        $main = $this->response->first('/oai:OAI-PMH/oai:ListRecords');
+        if ($main) {
+            foreach ($main->xpath('oai:record') as $record) {
+                $this->records[] = new Record($record);
+            }
 
-        foreach ($main->xpath('oai:record') as $record) {
-            $this->records[] = new Record($record);
-        }
-
-        $r = $main->first('oai:resumptionToken') ?: null;
-        if ($r) {
-            $this->numberOfRecords = intval($r->attr('completeListSize'));
-            $this->cursor = intval($r->attr('cursor'));
-            $this->resumptionToken = $r->text();
-        } else {
-            $this->resumptionToken = null;            
+            $r = $main->first('oai:resumptionToken') ?: null;
+            if ($r) {
+                $this->numberOfRecords = intval($r->attr('completeListSize'));
+                $this->cursor = intval($r->attr('cursor'));
+                $this->resumptionToken = $r->text();
+            } else {
+                $this->resumptionToken = null;            
+            }
         }
     }
 
