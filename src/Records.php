@@ -31,6 +31,7 @@ class Records implements \Iterator {
 	private $lastResponse;
 
 	private $position;
+	private $resumptionToken = null;
 
     /** @var int Total number of records in the result set */
     public $numberOfRecords;
@@ -79,7 +80,7 @@ class Records implements \Iterator {
 			'until' => $this->until,
 			'set' => $this->set,
 		);
-		if (isset($this->resumptionToken)) {
+		if (!is_null($this->resumptionToken)) {
 			$args['resumptionToken'] = $this->resumptionToken;
 		}
 		$url = $this->client->urlBuilder('ListRecords', $args);
@@ -90,10 +91,16 @@ class Records implements \Iterator {
 		$body = $res->getBody(true);
 		$this->lastResponse = new ListRecordsResponse($body);
 		$this->data = $this->lastResponse->records;
+
 		if (isset($this->lastResponse->numberOfRecords) && !is_null($this->lastResponse->numberOfRecords)) {
 			$this->numberOfRecords = $this->lastResponse->numberOfRecords;
+
 		} else if (!isset($this->numberOfRecords)) {
 			$this->numberOfRecords = count($this->lastResponse->records);
+		}
+
+		if (isset($this->lastResponse->resumptionToken)) {
+			$this->resumptionToken = $this->lastResponse->resumptionToken;
 		}
 
 	}
@@ -122,6 +129,7 @@ class Records implements \Iterator {
 	function rewind() {
 		if ($this->position != 1) {
 			$this->position = 1;
+			$this->resumptionToken = null;
 			$this->data = array();
 			$this->fetchMore();
 		}
