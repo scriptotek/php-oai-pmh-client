@@ -1,14 +1,15 @@
 {
     "name": "scriptotek/oai-client",
     "type": "library",
-    "description": "Package for making Search/Retrieve via URL requests and parse the responses",
+    "description": "Package for harvesting data from OAI-PMH repositories",
     "homepage": "http://github.com/scriptotek/oai-client",
-    "keywords": ["oai"],
+    "keywords": ["OAI-PMH"],
     "require": {
         "danmichaelo/quitesimplexmlelement": "~0.2",
         "guzzle/guzzle": "~3.8"
     },
     "require-dev": {
+        "php": ">=5.3",
         "phpunit/phpunit": "~4.0",
         "satooshi/php-coveralls": "~0.6",
         "mockery/mockery": "~0.9",
@@ -21,6 +22,9 @@
             "email": "danmichaelo@gmail.com"
         }
     ],
+    "support": {
+        "issues": "http://github.com/scriptotek/oai-client/issues"
+    },
     "autoload": {
         "psr-4": {
             "Scriptotek\\Oai\\": "src/"
