@@ -30,8 +30,9 @@ class RecordsTest extends TestCase {
 
         $recordTpl = $this->recordTpl;
 
-        $records = implode('', array_map(function($n) use ($recordTpl, $options) {
-            $identifier = $this->array_get( $options, 'identifier', $this->randStr(16) );
+        $that = $this; // for PHP 5.3 compability we need to pass $this to the anonymous function :(
+        $records = implode('', array_map(function($n) use ($recordTpl, $options, $that) {
+            $identifier = $that->array_get( $options, 'identifier', $that->randStr(16) );
             return str_replace(
                 array('{{identifier}}', '{{datestamp}}', '{{data}}'),
                 array($identifier, '2012-01-01', 'RecordData #' . $n),
