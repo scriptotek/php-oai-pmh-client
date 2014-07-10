@@ -62,7 +62,7 @@ class RecordsTest extends TestCase {
         $http = $this->httpMockSingleResponse($response);
 
 		$client = new Client($uri);
-		$records = new Records($args['from'], $args['until'], $args['set'], $client, 10, array(), $http);
+		$records = new Records($args['from'], $args['until'], $args['set'], $client, array(), $http);
 		$this->assertNull($records->error);
 		$this->assertEquals(8, $records->numberOfRecords);
 		$records->rewind();
@@ -97,7 +97,7 @@ class RecordsTest extends TestCase {
         $http = $this->httpMockSingleResponse($this->errorResponse);
 
 		$client = new Client($uri);
-		$records = new Records($args['from'], $args['until'], $args['set'], $client, 10, array(), $http);
+		$records = new Records($args['from'], $args['until'], $args['set'], $client, array(), $http);
 
 		$this->assertEquals('unknown set name: norgessoks', $records->error);
 		$this->assertEquals('badArgument', $records->errorCode);

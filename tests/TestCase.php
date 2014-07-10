@@ -46,7 +46,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
      * @param  mixed   $default
      * @return mixed
      */
-    protected function array_get($array, $key, $default = null)
+    public function array_get($array, $key, $default = null)
     {
         if (is_null($key)) return $array;
 
