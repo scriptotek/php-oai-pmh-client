@@ -65,24 +65,5 @@ class ListRecordsResponse extends Response {
         }
     }
 
-    /**
-     * Request next batch of records in the result set, or return null if we're at the end of the set
-     *
-     * @return Response
-     */
-    public function next()
-    {
-        if (is_null($this->client)) {
-            throw new \Exception('No client reference passed to response');
-        }
-        if (is_null($this->query)) {
-            throw new \Exception('No query available');
-        }
-        if (is_null($this->nextRecordPosition)) {
-            return null;
-        }
-        return $this->client->search($this->query, $this->nextRecordPosition, count($this->records));
-    }
-
 }
 

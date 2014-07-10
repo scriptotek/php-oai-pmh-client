@@ -48,7 +48,7 @@ class Records implements \Iterator {
      * @param array $extraParams Extra GET parameters (optional)
      * @param mixed $httpClient A http client (optional)
      */
-	public function __construct($from, $until, $set, Client $client, $count = 10, $extraParams = array(), $httpClient = null) {
+	public function __construct($from, $until, $set, Client $client, $extraParams = array(), $httpClient = null) {
 		$this->from = $from;
 		$this->until = $until;
 		$this->set = $set;
