@@ -71,6 +71,16 @@ class Records implements \Iterator {
 	}
 
 	/**
+     * Return the current resumption token
+     *
+     * @return string|null
+     */
+	public function getResumptionToken()
+	{
+		return $this->resumptionToken;
+	}
+
+	/**
      * Fetch more records from the service
      */
 	private function fetchMore()
