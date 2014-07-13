@@ -1,6 +1,7 @@
 <?php namespace Scriptotek\Oai;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
+use \Guzzle\Http\Exception\BadResponseException as BadResponseException;
 use \Mockery as m;
 
 class ClientTest extends TestCase {
@@ -66,6 +67,49 @@ class ClientTest extends TestCase {
 
         $mock->record('test');
     }
+
+    // Works, but slow due to sleep:
+    //
+    // public function testRequestErrorEvent()
+    // {
+
+    //     $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
+
+    //     $request = m::mock();
+    //     $request->shouldReceive('send')
+    //         ->once()
+    //         ->andReturn(new HttpResponse(200, null, $body));
+
+    //     $this->n = 0;
+
+    //     $http = m::mock();
+    //     $http->shouldReceive('get')
+    //         ->once()
+    //         ->with(\Mockery::on(function($arg) use ($request) {
+    //             $this->n++;
+    //             if ($this->n > 2) {
+    //                 return true;
+    //             }
+    //             throw new BadResponseException("OI");
+    //         }), \Mockery::any())
+    //         ->andReturn($request);
+
+
+    //     $mock = m::mock('Scriptotek\Oai\Client[emit]', array('nowhere', null, $http));
+    //     $mock->shouldReceive('emit')
+    //         ->with('request.start', \Mockery::any())
+    //         ->once();
+
+    //     $mock->shouldReceive('emit')
+    //         ->with('request.error', \Mockery::any())
+    //         ->times(2);
+
+    //     $mock->shouldReceive('emit')
+    //         ->with('request.complete', \Mockery::any())
+    //         ->once();
+
+    //     $mock->record('test');
+    // }
 
 }
 

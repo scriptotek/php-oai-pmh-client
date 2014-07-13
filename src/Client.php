@@ -37,6 +37,11 @@ class Client extends EventEmitter {
     protected $credentials;
 
     /**
+     * @var integer
+     */
+    protected $maxRetries;
+
+    /**
      * Create a new client
      *
      * @param string $url Base URL to the OAI service
@@ -64,6 +69,10 @@ class Client extends EventEmitter {
         $this->proxy = isset($options['proxy'])
             ? $options['proxy']
             : null;
+
+        $this->maxRetries = isset($options['maxRetries'])
+            ? $options['maxRetries']
+            : 12;
     }
 
     /**
@@ -127,7 +136,22 @@ class Client extends EventEmitter {
         ));
         $url = $this->urlBuilder($verb, $arguments);
         $options = $this->getHttpOptions();
-        $res = $this->httpClient->get($url, $options)->send();
+        $attempt = 0;
+        while (true) {
+            try {
+                $res = $this->httpClient->get($url, $options)->send();
+                break;
+            } catch (\Guzzle\Http\Exception\BadResponseException $e) {
+                $this->emit('request.error', array(
+                    'message' => $e->getMessage(),
+                ));
+                sleep(15);
+            }
+            $attempt++;
+            if ($attempt > $this->maxRetries) {
+                return '';
+            }
+        }
         $body = $res->getBody(true);
         $this->emit('request.complete', array(
             'verb' => $verb,
