@@ -161,7 +161,7 @@ class Client extends EventEmitter {
      */
     public function records($from, $until, $set, $resumptionToken = null, $extraParams = array())
     {
-        return new Records($from, $until, $set, $this, $resumptionToken, $extraParams, $this->httpClient);
+        return new Records($from, $until, $set, $this, $resumptionToken, $extraParams);
     }
 
 }
