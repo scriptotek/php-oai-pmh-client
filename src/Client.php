@@ -115,7 +115,7 @@ class Client {
      * @param array $arguments OAI arguments
      * @return string
      */
-    protected function request($verb, $arguments)
+    public function request($verb, $arguments)
     {
         $url = $this->urlBuilder($verb, $arguments);
         $options = $this->getHttpOptions();

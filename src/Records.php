@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Oai;
 
-use \Guzzle\Http\Client as HttpClient;
-
 /**
  * When iterating, methods are called in the following order:
  * 
@@ -19,9 +17,6 @@ use \Guzzle\Http\Client as HttpClient;
  * valid()
  */
 class Records implements \Iterator {
-
-	/** @var HttpClient */
-	protected $httpClient;
 
 	private $from;
 	private $until;
@@ -47,16 +42,14 @@ class Records implements \Iterator {
      * @param Client $client OAI client reference
      * @param string $resumptionToken
      * @param array $extraParams Extra GET parameters (optional)
-     * @param mixed $httpClient A http client (optional)
      */
-	public function __construct($from, $until, $set, Client $client, $resumptionToken = null, $extraParams = array(), $httpClient = null) {
+	public function __construct($from, $until, $set, Client $client, $resumptionToken = null, $extraParams = array()) {
 		$this->from = $from;
 		$this->until = $until;
 		$this->set = $set;
 		$this->client = $client;
 		$this->resumptionToken = $resumptionToken;
 		$this->extraParams = $extraParams;
-		$this->httpClient = $httpClient ?: new HttpClient;
 		$this->position = 1;
 		$this->fetchMore();
 	}
@@ -95,12 +88,8 @@ class Records implements \Iterator {
 		if (!is_null($this->resumptionToken)) {
 			$args['resumptionToken'] = $this->resumptionToken;
 		}
-		$url = $this->client->urlBuilder('ListRecords', $args);
 
-		$options = $this->client->getHttpOptions();
-
-		$res = $this->httpClient->get($url, $options)->send();
-		$body = $res->getBody(true);
+		$body = $this->client->request('ListRecords', $args);
 		$this->lastResponse = new ListRecordsResponse($body);
 		$this->data = $this->lastResponse->records;
 
