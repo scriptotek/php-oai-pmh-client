@@ -5,16 +5,16 @@
     "homepage": "http://github.com/scriptotek/oai-client",
     "keywords": ["OAI-PMH"],
     "require": {
+        "php": ">=5.3",
         "danmichaelo/quitesimplexmlelement": "~0.2",
-        "guzzle/guzzle": "~3.8"
+        "guzzle/guzzle": "~3.8",
+        "evenement/evenement": "1.0.*"
     },
     "require-dev": {
-        "php": ">=5.3",
         "phpunit/phpunit": "~4.0",
         "satooshi/php-coveralls": "~0.6",
         "mockery/mockery": "~0.9",
-        "sami/sami": "~1.4",
-        "evenement/evenement": "1.0.*"
+        "sami/sami": "~1.4"
     },
     "license": "MIT",
     "authors": [
