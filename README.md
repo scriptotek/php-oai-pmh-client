@@ -63,14 +63,14 @@ foreach ($client->records('') as $record) {
 ### Events
 
 ```php
-$client->on('request.start', function($verb, $args) {
-    // ...
+$client->on('request.start', function($verb) {
+    print "Starting " . $verb . " request\n";
 });
-```
-
-```php
-$client->on('request.complete', function($verb, $args, $body) {
-    // ...    
+$client->on('request.error', function($err) {
+    print "Non-fatal error: " . $err . "\n";
+});
+$client->on('request.complete', function($verb) {
+    print "Completed " . $verb . " request\n";
 });
 ```
 

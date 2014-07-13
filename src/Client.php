@@ -167,12 +167,12 @@ class Client extends EventEmitter {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(1);
+                sleep(15);
             } catch (\Guzzle\Http\Exception\CurlException $e) {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(1);
+                sleep(15);
             }
             $attempt++;
             if ($attempt > $this->maxRetries) {
