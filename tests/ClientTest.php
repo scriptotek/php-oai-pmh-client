@@ -37,7 +37,7 @@ class ClientTest extends TestCase {
 
         $http->shouldReceive('get')
             ->once()
-            ->with("/$resumptionToken/", m::any())
+            ->with("/$resumptionToken/", m::any(), m::any())
             ->andReturn($http);
 
         $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
@@ -91,7 +91,7 @@ class ClientTest extends TestCase {
     //                 return true;
     //             }
     //             throw new BadResponseException("OI");
-    //         }), \Mockery::any())
+    //         }), m::any(), m::any())
     //         ->andReturn($request);
 
 

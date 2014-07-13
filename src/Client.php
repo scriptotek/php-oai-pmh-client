@@ -42,6 +42,11 @@ class Client extends EventEmitter {
     protected $maxRetries;
 
     /**
+     * @var integer
+     */
+    protected $timeout;
+
+    /**
      * Create a new client
      *
      * @param string $url Base URL to the OAI service
@@ -73,23 +78,22 @@ class Client extends EventEmitter {
         $this->maxRetries = isset($options['maxRetries'])
             ? $options['maxRetries']
             : 12;
+
+        $this->timeout = isset($options['timeout'])
+            ? $options['timeout']
+            : 30.0;
     }
 
     /**
-     * Get HTTP client configuration options (authentication, proxy, headers)
+     * Get HTTP client configuration options (authentication, proxy)
      * 
      * @return array
      */
     public function getHttpOptions()
     {
-        $headers = array(
-            'Accept' => 'application/xml'
-        );
-        if ($this->userAgent) {
-            $headers['User-Agent'] = $this->userAgent;
-        }
         $options = array(
-            'headers' => $headers
+            'connect_timeout' => $this->timeout,
+            'timeout' => $this->timeout,
         );
         if ($this->credentials) {
             $options['auth'] = $this->credentials;
@@ -98,6 +102,22 @@ class Client extends EventEmitter {
             $options['proxy'] = $this->proxy;
         }
         return $options;
+    }
+
+    /**
+     * Get HTTP client headers
+     * 
+     * @return array
+     */
+    public function getHttpHeaders()
+    {
+        $headers = array(
+            'Accept' => 'application/xml'
+        );
+        if ($this->userAgent) {
+            $headers['User-Agent'] = $this->userAgent;
+        }
+        return $headers;
     }
 
     /**
@@ -135,22 +155,24 @@ class Client extends EventEmitter {
             'arguments' => $arguments
         ));
         $url = $this->urlBuilder($verb, $arguments);
-        $options = $this->getHttpOptions();
         $attempt = 0;
         while (true) {
             try {
-                $res = $this->httpClient->get($url, $options)->send();
+                $res = $this->httpClient->get($url, 
+                    $this->getHttpHeaders(),
+                    $this->getHttpOptions()
+                )->send();
                 break;
-            } catch (\Guzzle\Http\Exception\BadResponseException $e) {
+            } catch (\Guzzle\Http\Exception\RequestException $e) {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(15);
+                sleep(1);
             } catch (\Guzzle\Http\Exception\CurlException $e) {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(15);
+                sleep(1);
             }
             $attempt++;
             if ($attempt > $this->maxRetries) {
@@ -194,4 +216,3 @@ class Client extends EventEmitter {
     }
 
 }
-
