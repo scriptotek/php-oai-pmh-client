@@ -25,5 +25,26 @@ class ClientTest extends TestCase {
         );
     }
 
+    public function testResumptionTokenIsSentToHttpClient()
+    {
+        $resumptionToken = 'dasdsa93123jkldasjkl23';
+        $http = m::mock();
+
+        $http->shouldReceive('get')
+            ->once()
+            ->with("/$resumptionToken/", m::any())
+            ->andReturn($http);
+
+        $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
+
+        $http->shouldReceive('send')
+            ->once()
+            ->andReturn(new HttpResponse(200, null, $body));
+
+        $cli = new Client('nowhere', null, $http);
+        $cli->records('2012-01-01', '2012-01-02', 'set', $resumptionToken);
+
+    }
+
 }
 

@@ -141,13 +141,13 @@ class Client {
      * @param string $from Start date
      * @param string $until End date
      * @param string $set Data set
+     * @param string $resumptionToken To resume a harvest
      * @param array $extraParams Extra GET parameters
-     * @param mixed $httpClient A http client
      * @return Records
      */
-    public function records($from, $until, $set, $extraParams = array(), $httpClient = null)
+    public function records($from, $until, $set, $resumptionToken = null, $extraParams = array())
     {
-        return new Records($from, $until, $set, $this, $extraParams, $httpClient);
+        return new Records($from, $until, $set, $this, $resumptionToken, $extraParams, $this->httpClient);
     }
 
 }

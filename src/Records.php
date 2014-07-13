@@ -45,14 +45,16 @@ class Records implements \Iterator {
      * @param string $until End date
      * @param string $set Data set
      * @param Client $client OAI client reference
+     * @param string $resumptionToken
      * @param array $extraParams Extra GET parameters (optional)
      * @param mixed $httpClient A http client (optional)
      */
-	public function __construct($from, $until, $set, Client $client, $extraParams = array(), $httpClient = null) {
+	public function __construct($from, $until, $set, Client $client, $resumptionToken = null, $extraParams = array(), $httpClient = null) {
 		$this->from = $from;
 		$this->until = $until;
 		$this->set = $set;
 		$this->client = $client;
+		$this->resumptionToken = $resumptionToken;
 		$this->extraParams = $extraParams;
 		$this->httpClient = $httpClient ?: new HttpClient;
 		$this->position = 1;
