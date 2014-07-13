@@ -20,6 +20,10 @@ class RecordsTest extends TestCase {
 		</OAI-PMH>
 		';
 
+    protected function tearDown() {
+        m::close();
+    }
+
 	/**
      *  numberOfRecords : Total number of records in response
      */
@@ -40,15 +44,17 @@ class RecordsTest extends TestCase {
             );
         }, range($startIndex, $startIndex + $numberOfRecords - 1)));
 
+        $resumptionToken = $includeResumptionToken ? 'TODO' : '';
+
         $ls = str_replace(
-            array('{{records}}', '{{numberOfRecords}}'),
-            array($records, $numberOfRecords),
+            array('{{records}}', '{{resumptionToken}}'),
+            array($records, $resumptionToken),
             $this->listRecordsTpl
         );
         return str_replace('{{main}}', $ls, $this->baseTpl);
     }
 
-	public function testIterating()
+	public function testBasicIteration()
 	{
 		$uri = 'http://localhost';
 		$args = array(
@@ -57,12 +63,17 @@ class RecordsTest extends TestCase {
 			'set' => 'Dummy',
 		);
 		$n = 8;
-		$response = $this->makeDummyResponse($n, 1, true, $args);
 
-        $http = $this->httpMockSingleResponse($response);
+		$responses = array(
+			$response = $this->makeDummyResponse($n, 1, false, $args),
+		);
+        $http = $this->httpMockListResponse($responses);
 
+		
+        // $http = $this->httpMockSingleResponse($response);
 		$client = new Client($uri, null, $http);
 		$records = new Records($args['from'], $args['until'], $args['set'], $client);
+
 		$this->assertNull($records->error);
 		$this->assertEquals(8, $records->numberOfRecords);
 		$records->rewind();
@@ -74,9 +85,34 @@ class RecordsTest extends TestCase {
 		$records->next();
 		$this->assertEquals(3, $records->key());
 		$this->assertTrue($records->valid());
+	}
+
+	public function testRewindCausesANewRequest()
+	{
+		$uri = 'http://localhost';
+		$args = array(
+			'from' => '2012-01-01',
+			'until' => '2012-01-02',
+			'set' => 'Dummy',
+		);
+		$n = 8;
+
+		$responses = array(
+			$response = $this->makeDummyResponse($n, 1, false, $args),
+			$response = $this->makeDummyResponse($n, 1, false, $args),
+			$response = $this->makeDummyResponse($n, 1, false, $args),
+		);
+        $http = $this->httpMockListResponse($responses);
+
+		
+        // $http = $this->httpMockSingleResponse($response);
+		$client = new Client($uri, null, $http);
+		$records = new Records($args['from'], $args['until'], $args['set'], $client);
+
+		$this->assertNull($records->error);
+		$records->next();
 		$records->rewind();
-		$this->assertEquals(1, $records->key());
-		$this->assertTrue($records->valid());
+		$records->next();
 
 		$i = 0;
 		foreach ($records as $rec) {

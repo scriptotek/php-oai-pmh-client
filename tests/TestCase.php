@@ -105,6 +105,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
     {
         $request = m::mock();
         $request->shouldReceive('send')
+            ->times(count($responses))
             ->andReturnValues(array_map(function($r) {
                 return new HttpResponse(200, null, $r);
             }, $responses));

@@ -60,6 +60,20 @@ foreach ($client->records('') as $record) {
 }
 ```
 
+### Events
+
+```php
+$client->on('request.start', function($verb, $args) {
+    // ...
+});
+```
+
+```php
+$client->on('request.complete', function($verb, $args, $body) {
+    // ...    
+});
+```
+
 ### API documentation 
 
 API documentation can be generated using e.g. [Sami](https://github.com/fabpot/sami),

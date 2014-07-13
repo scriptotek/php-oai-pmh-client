@@ -1,5 +1,6 @@
 <?php namespace Scriptotek\Oai;
 
+use Evenement\EventEmitter;
 /**
  * When iterating, methods are called in the following order:
  * 
@@ -16,7 +17,10 @@
  * next()
  * valid()
  */
-class Records implements \Iterator {
+class Records extends EventEmitter implements \Iterator {
+
+	// When we no longer need to support PHP 5.3:
+	// - Upgrade to Evenement 2.0 and use trait instead of extending
 
 	private $from;
 	private $until;

@@ -1,11 +1,15 @@
 <?php namespace Scriptotek\Oai;
  
 use \Guzzle\Http\Client as HttpClient;
+use \Evenement\EventEmitter;
 
 /**
  * OAI client
  */
-class Client {
+class Client extends EventEmitter {
+
+    // When we no longer need to support PHP 5.3:
+    // - Upgrade to Evenement 2.0 and use trait instead of extending
 
     /** @var HttpClient */
     protected $httpClient;
@@ -117,10 +121,20 @@ class Client {
      */
     public function request($verb, $arguments)
     {
+        $this->emit('request.start', array(
+            'verb' => $verb,
+            'arguments' => $arguments
+        ));
         $url = $this->urlBuilder($verb, $arguments);
         $options = $this->getHttpOptions();
         $res = $this->httpClient->get($url, $options)->send();
-        return $res->getBody(true);
+        $body = $res->getBody(true);
+        $this->emit('request.complete', array(
+            'verb' => $verb,
+            'arguments' => $arguments,
+            'response' => $body
+        ));
+        return $body;
     }
 
     /**

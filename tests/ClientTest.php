@@ -15,6 +15,10 @@ class ClientTest extends TestCase {
             <sru:explainResponse xmlns:sru="http://www.loc.gov/zing/srw/">
             </sru:explainResponse>';
 
+    protected function tearDown() {
+        m::close();
+    }
+
     public function testUrlBuilder()
     {
         $cli1 = new Client($this->url);
@@ -44,6 +48,23 @@ class ClientTest extends TestCase {
         $cli = new Client('nowhere', null, $http);
         $cli->records('2012-01-01', '2012-01-02', 'set', $resumptionToken);
 
+    }
+
+    public function testRequestEventsAreSent()
+    {
+        $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
+        $http = $this->httpMockSingleResponse($body);
+        $mock = m::mock('Scriptotek\Oai\Client[emit]', array('nowhere', null, $http));
+
+        $mock->shouldReceive('emit')
+            ->with('request.start', array('verb' => 'GetRecord', 'arguments' => array('identifier' => 'test')))
+            ->once();
+
+        $mock->shouldReceive('emit')
+            ->with('request.complete', m::any())
+            ->once();
+
+        $mock->record('test');
     }
 
 }
