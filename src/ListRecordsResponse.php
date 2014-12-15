@@ -25,13 +25,13 @@ class ListRecordsResponse extends Response {
     public $records;
 
     /** @var int Total number of records in the result set */
-    public $numberOfRecords;
+    public $numberOfRecords = null;
 
     /** @var int Position of the first record in the response relative to the result set (starts at 0) */
-    public $cursor;
+    public $cursor = null;
 
     /** @var int Token for retrieving more records */
-    public $resumptionToken;
+    public $resumptionToken = null;
 
     /**
      * Create a new ListRecords response
@@ -46,22 +46,26 @@ class ListRecordsResponse extends Response {
         $err = $this->response->first('/oai:OAI-PMH/oai:error');
         $this->error = $err ? $err->text() : null;
         $this->errorCode = $err ? $err->attr('code') : null;
-
         $this->records = array();
-        $main = $this->response->first('/oai:OAI-PMH/oai:ListRecords');
-        if ($main) {
-            foreach ($main->xpath('oai:record') as $record) {
-                $this->records[] = new Record($record);
-            }
 
-            $r = $main->first('oai:resumptionToken') ?: null;
-            if ($r) {
-                $this->numberOfRecords = ($r->attr('completeListSize') === '') ? null : intval($r->attr('completeListSize'));
-                $this->cursor = ($r->attr('cursor') === '') ? null : intval($r->attr('cursor'));
-                $this->resumptionToken = $r->text();
-            } else {
-                $this->resumptionToken = null;            
-            }
+        $records = $this->response->first('/oai:OAI-PMH/oai:ListRecords');
+        if (!$records) return;
+
+        foreach ($records->xpath('oai:record') as $record) {
+            $this->records[] = new Record($record);
+        }
+
+        $resumptionToken = $records->first('oai:resumptionToken');
+        if (!$resumptionToken) return;
+
+        $this->resumptionToken = $resumptionToken->text();
+        
+        // These are optional:
+        if ($resumptionToken->attr('completeListSize') !== '') {
+            $this->numberOfRecords = intval($resumptionToken->attr('completeListSize'));
+        }
+        if ($resumptionToken->attr('cursor') !== '') {
+            $this->cursor = intval($resumptionToken->attr('cursor'));
         }
     }
 

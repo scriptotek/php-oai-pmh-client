@@ -46,6 +46,11 @@ class Client extends EventEmitter {
      */
     public $timeout;
 
+    public function array_get($arr, $key, $default = null)
+    {
+        return (isset($arr[$key])) ? $arr[$key] : $default;
+    }
+
     /**
      * Create a new client
      *
@@ -53,35 +58,17 @@ class Client extends EventEmitter {
      * @param array $options Associative array of options
      * @param HttpClient $httpClient
      */
-    public function __construct($url, $options = null, $httpClient = null)
+    public function __construct($url, $options = array(), $httpClient = null)
     {
         $this->url = $url;
-        $options = $options ?: array();
         $this->httpClient = $httpClient ?: new HttpClient;
 
-        $this->schema = isset($options['schema'])
-            ? $options['schema']
-            : 'marcxchange';
-
-        $this->userAgent = isset($options['user-agent'])
-            ? $options['user-agent']
-            : 'php-oai-client';
-
-        $this->credentials = isset($options['credentials'])
-            ? $options['credentials']
-            : null;
-
-        $this->proxy = isset($options['proxy'])
-            ? $options['proxy']
-            : null;
-
-        $this->maxRetries = isset($options['maxRetries'])
-            ? $options['maxRetries']
-            : 12;
-
-        $this->timeout = isset($options['timeout'])
-            ? $options['timeout']
-            : 60.0;
+        $this->schema = $this->array_get($options, 'schema', 'marcxchange');
+        $this->userAgent = $this->array_get($options, 'user-agent', 'php-oai-client');
+        $this->credentials = $this->array_get($options, 'credentials');
+        $this->proxy = $this->array_get($options, 'proxy');
+        $this->maxRetries = $this->array_get($options, 'maxRetries', 12);
+        $this->timeout = $this->array_get($options, 'timeout', 60.0);
     }
 
     /**
