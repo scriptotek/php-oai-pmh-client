@@ -18,10 +18,10 @@ class Client extends EventEmitter {
     protected $url;
 
     /** @var string Requested schema for the returned records */
-    protected $schema;
+    public $schema;
 
     /** @var string Some user agent string to identify our client */
-    protected $userAgent;
+    public $userAgent;
 
     /**
      * @var string|string[] Proxy configuration details.
@@ -29,22 +29,22 @@ class Client extends EventEmitter {
      * Either a string 'host:port' or an 
      * array('host:port', 'username', 'password').
      */
-    protected $proxy;
+    public $proxy;
 
     /**
      * @var string[] Array containing username and password
      */
-    protected $credentials;
+    public $credentials;
 
     /**
      * @var integer
      */
-    protected $maxRetries;
+    public $maxRetries;
 
     /**
      * @var integer
      */
-    protected $timeout;
+    public $timeout;
 
     /**
      * Create a new client
@@ -61,11 +61,11 @@ class Client extends EventEmitter {
 
         $this->schema = isset($options['schema'])
             ? $options['schema']
-            : 'marcxml';
+            : 'marcxchange';
 
         $this->userAgent = isset($options['user-agent'])
             ? $options['user-agent']
-            : null;
+            : 'php-oai-client';
 
         $this->credentials = isset($options['credentials'])
             ? $options['credentials']
@@ -81,7 +81,7 @@ class Client extends EventEmitter {
 
         $this->timeout = isset($options['timeout'])
             ? $options['timeout']
-            : 30.0;
+            : 60.0;
     }
 
     /**

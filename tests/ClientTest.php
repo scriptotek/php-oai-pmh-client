@@ -20,12 +20,24 @@ class ClientTest extends TestCase {
         m::close();
     }
 
+    public function testDefaults()
+    {
+        $cli1 = new Client($this->url);
+
+        $this->assertEquals('marcxchange', $cli1->schema);
+        $this->assertEquals('php-oai-client', $cli1->userAgent);
+        $this->assertNull($cli1->credentials);
+        $this->assertNull($cli1->proxy);
+        $this->assertEquals(12, $cli1->maxRetries);
+        $this->assertEquals(60.0, $cli1->timeout);
+    }
+
     public function testUrlBuilder()
     {
         $cli1 = new Client($this->url);
 
         $this->assertEquals(
-            $this->url . '?verb=GetRecord&metadataPrefix=marcxml&identifier=TEST',
+            $this->url . '?verb=GetRecord&metadataPrefix=marcxchange&identifier=TEST',
             $cli1->urlBuilder('GetRecord', array('identifier' => 'TEST'))
         );
     }
