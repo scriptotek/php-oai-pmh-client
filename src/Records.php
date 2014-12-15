@@ -160,11 +160,7 @@ class Records extends EventEmitter implements \Iterator {
 		}
 		++$this->position;
 
-		if ($this->position > $this->numberOfRecords) {
-			return null;
-		}
-
-		if (count($this->data) == 0) {
+		if (count($this->data) == 0 && !is_null($this->resumptionToken)) {
 			$this->fetchMore();
 		}
 
