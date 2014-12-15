@@ -30,7 +30,9 @@ class Records extends EventEmitter implements \Iterator {
 	private $lastResponse;
 
 	private $position;
-	private $resumptionToken = null;
+	private $initialPosition;
+	private $resumptionToken;
+	private $initialResumptionToken;
 
     /** @var int Total number of records in the result set */
     public $numberOfRecords;
@@ -53,9 +55,14 @@ class Records extends EventEmitter implements \Iterator {
 		$this->set = $set;
 		$this->client = $client;
 		$this->resumptionToken = $resumptionToken;
+
 		$this->extraParams = $extraParams;
 		$this->position = 1;
 		$this->fetchMore();
+
+		// Store initial position, might not be 1 if we are resuming an operation
+		$this->initialPosition = $this->position;
+		$this->initialResumptionToken = $resumptionToken;
 	}
 
 	/**
@@ -99,6 +106,7 @@ class Records extends EventEmitter implements \Iterator {
 
 		if (isset($this->lastResponse->numberOfRecords) && !is_null($this->lastResponse->numberOfRecords)) {
 			$this->numberOfRecords = $this->lastResponse->numberOfRecords;
+			$this->position = $this->lastResponse->cursor + 1;
 
 		} else if (!isset($this->numberOfRecords)) {
 			$this->numberOfRecords = count($this->lastResponse->records);
@@ -106,6 +114,8 @@ class Records extends EventEmitter implements \Iterator {
 
 		if (isset($this->lastResponse->resumptionToken)) {
 			$this->resumptionToken = $this->lastResponse->resumptionToken;
+		} else {
+			// $this->resumptionToken = null;
 		}
 
 	}
@@ -132,9 +142,9 @@ class Records extends EventEmitter implements \Iterator {
      * Rewind the Iterator to the first element
      */
 	function rewind() {
-		if ($this->position != 1) {
-			$this->position = 1;
-			$this->resumptionToken = null;
+		if ($this->position != $this->initialPosition) {
+			$this->position = $this->initialPosition;
+			$this->resumptionToken = $this->initialResumptionToken;
 			$this->data = array();
 			$this->fetchMore();
 		}

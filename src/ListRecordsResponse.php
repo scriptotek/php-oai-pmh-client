@@ -27,7 +27,7 @@ class ListRecordsResponse extends Response {
     /** @var int Total number of records in the result set */
     public $numberOfRecords;
 
-    /** @var int Position of next record in the result set, or null if no such record exist */
+    /** @var int Position of the first record in the response relative to the result set (starts at 0) */
     public $cursor;
 
     /** @var int Token for retrieving more records */
@@ -56,8 +56,8 @@ class ListRecordsResponse extends Response {
 
             $r = $main->first('oai:resumptionToken') ?: null;
             if ($r) {
-                $this->numberOfRecords = intval($r->attr('completeListSize'));
-                $this->cursor = intval($r->attr('cursor'));
+                $this->numberOfRecords = ($r->attr('completeListSize') === '') ? null : intval($r->attr('completeListSize'));
+                $this->cursor = ($r->attr('cursor') === '') ? null : intval($r->attr('cursor'));
                 $this->resumptionToken = $r->text();
             } else {
                 $this->resumptionToken = null;            
