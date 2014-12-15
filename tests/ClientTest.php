@@ -32,6 +32,30 @@ class ClientTest extends TestCase {
         $this->assertEquals(60.0, $cli1->timeout);
     }
 
+    public function testHeaders()
+    {
+        $cli = new Client($this->url, array('user-agent' => 'MyAwesomeHarvester/0.1'));
+        $headers = $cli->getHttpHeaders();
+
+        $this->assertEquals('application/xml', $headers['Accept']);
+        $this->assertEquals('MyAwesomeHarvester/0.1', $headers['User-Agent']);
+    }
+
+    public function testHttpOptions()
+    {
+        $cli = new Client($this->url, array(
+            'timeout' => 13,
+            'credentials' => array('Galileo', 'Galilei'),
+            'proxy' => array('myproxy.nu', 9870),
+            ));
+        $opts = $cli->getHttpOptions();
+
+        $this->assertEquals(13, $opts['connect_timeout']);
+        $this->assertEquals(13, $opts['timeout']);
+        $this->assertEquals(array('Galileo', 'Galilei'), $opts['auth']);
+        $this->assertEquals(array('myproxy.nu', 9870), $opts['proxy']);
+    }
+
     public function testUrlBuilder()
     {
         $cli1 = new Client($this->url);
