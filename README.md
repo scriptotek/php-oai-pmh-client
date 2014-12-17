@@ -4,10 +4,11 @@
 
 ## php-oai-client
 
-Simple OAI package for making OAI-PMH requests, using the 
-[Guzzle HTTP client](http://guzzlephp.org/)
-and returning 
-[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement) instances. 
+Simple PHP client package for fetching data from an OAI-PMH server, using the 
+[Guzzle HTTP client](http://guzzlephp.org/). The returned data is parsed by
+[QuiteSimpleXMLElement](//github.com/danmichaelo/quitesimplexmlelement).
+On network problems, the client will retry a configurable number of times,
+with some sleep inbetween, before throwing a `ResponseException`.
 
 ### Install using Composer
 
@@ -33,14 +34,22 @@ $url = 'http://oai.bibsys.no/repository';
 
 $client = new OaiClient($url, array(
     'schema' => 'marcxchange',
-    'user-agent' => 'MyTool/0.1'
+    'user-agent' => 'MyTool/0.1',
+    'max-retries' => 10,
+    'sleep-time-on-error' => 30,
 ));
 ```
 
 #### Fetching a single record
 
 ```php
-$record = $client->record('oai:bibsys.no:biblio:113889372');
+try {
+    $record = $client->record('oai:bibsys.no:biblio:113889372');
+} catch (Scriptotek\Oai\ResponseException $e) {
+    echo 'The OAI-PMH server returned an empty or invalid response.'
+    die;
+    
+}
 if ($record->error) {
     echo $record->errorCode . ' : ' . $record->error . "\n";
     die;

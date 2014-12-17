@@ -100,8 +100,25 @@ class Records extends EventEmitter implements \Iterator {
 			$args['resumptionToken'] = $this->resumptionToken;
 		}
 
-		$body = $this->client->request('ListRecords', $args);
-		$this->lastResponse = new ListRecordsResponse($body);
+		$attempt = 0;
+		while (true) {
+			$body = $this->client->request('ListRecords', $args);
+			try {
+				$this->lastResponse = new ListRecordsResponse($body);
+				break;
+			} catch (\Danmichaelo\QuiteSimpleXMLElement\InvalidXMLException $e) {
+                $this->emit('request.error', array(
+                    'message' => $e->getMessage(),
+                ));
+                $attempt++;
+	            if ($attempt > $this->client->maxRetries) {
+	            	// Give up
+	            	throw new ResponseException('Failed to get a valid XML response from the server.', null, $e);
+	            }
+                sleep($this->client->sleepTimeOnError);
+            }
+		}
+
 		$this->data = $this->lastResponse->records;
 
 		if (isset($this->lastResponse->numberOfRecords) && !is_null($this->lastResponse->numberOfRecords)) {

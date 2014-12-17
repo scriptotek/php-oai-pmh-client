@@ -37,12 +37,17 @@ class Client extends EventEmitter {
     public $credentials;
 
     /**
-     * @var integer
+     * @var integer Max number of retries before giving up
      */
     public $maxRetries;
 
     /**
-     * @var integer
+     * @var integer Sleep time in seconds before retrying when getting an errorneous response
+     */
+    public $sleepTimeOnError;
+
+    /**
+     * @var integer Timeout for each request in seconds
      */
     public $timeout;
 
@@ -67,7 +72,8 @@ class Client extends EventEmitter {
         $this->userAgent = $this->array_get($options, 'user-agent', 'php-oai-client');
         $this->credentials = $this->array_get($options, 'credentials');
         $this->proxy = $this->array_get($options, 'proxy');
-        $this->maxRetries = $this->array_get($options, 'maxRetries', 12);
+        $this->maxRetries = $this->array_get($options, 'max-retries', 12);
+        $this->sleepTimeOnError = $this->array_get($options, 'sleep-time-on-error', 20);
         $this->timeout = $this->array_get($options, 'timeout', 60.0);
     }
 
@@ -154,16 +160,16 @@ class Client extends EventEmitter {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(15);
+                sleep($this->sleepTimeOnError);
             } catch (\Guzzle\Http\Exception\CurlException $e) {
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep(15);
+                sleep($this->sleepTimeOnError);
             }
             $attempt++;
             if ($attempt > $this->maxRetries) {
-                return '';
+                throw new ResponseException('Failed to get a response from the server.');
             }
         }
         $body = $res->getBody(true);
