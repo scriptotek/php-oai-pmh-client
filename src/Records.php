@@ -113,7 +113,7 @@ class Records extends EventEmitter implements \Iterator {
                 $attempt++;
 	            if ($attempt > $this->client->maxRetries) {
 	            	// Give up
-	            	throw new ResponseException('Failed to get a valid XML response from the server.', null, $e);
+	            	throw new ConnectionError('Failed to get a valid XML response from the server.', null, $e);
 	            }
                 sleep($this->client->sleepTimeOnError);
             }

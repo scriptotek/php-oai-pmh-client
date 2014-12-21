@@ -4,22 +4,6 @@
  * ListRecords response, containing a list of records or some error
  */
 class ListRecordsResponse extends Response {
-
-    /** @var string Error code 
-     *  Possible error codes:
-     *      badArgument
-     *      badResumptionToken
-     *      badVerb
-     *      cannotDisseminateFormat
-     *      idDoesNotExist
-     *      noRecordsMatch
-     *      noMetaDataFormats
-     *      noSetHierarchy
-     */
-    public $errorCode;
-
-    /** @var string Error message */
-    public $error;
  
     /** @var Record[] Array of records */
     public $records;
@@ -43,9 +27,6 @@ class ListRecordsResponse extends Response {
     {
         parent::__construct($text, $client);
 
-        $err = $this->response->first('/oai:OAI-PMH/oai:error');
-        $this->error = $err ? $err->text() : null;
-        $this->errorCode = $err ? $err->attr('code') : null;
         $this->records = array();
 
         $records = $this->response->first('/oai:OAI-PMH/oai:ListRecords');

@@ -1,7 +1,5 @@
 <?php namespace Scriptotek\Oai;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 class RecordTest extends TestCase {

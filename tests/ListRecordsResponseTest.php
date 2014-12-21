@@ -1,8 +1,5 @@
 <?php namespace Scriptotek\Oai;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
-
 class ListRecordsResponseTest extends TestCase {
 
 	public function testNormalResponse()
@@ -36,7 +33,6 @@ class ListRecordsResponseTest extends TestCase {
 			</ListRecords>
 			</OAI-PMH>');
 
-		$this->assertNull($res->error);
 		$this->assertCount(1, $res->records);
 		$this->assertEquals('lr~sesam~~~oai_dc~1020~459345~9351', $res->resumptionToken);
 		$this->assertEquals(1020, $res->cursor);

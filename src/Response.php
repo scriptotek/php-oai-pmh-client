@@ -16,9 +16,6 @@ class Response {
     /** @var Client Reference to OAI client object */
     protected $client;
 
-    /** @var string Error message */
-    public $error;
-
     /**
      * Create a new response
      *
@@ -38,10 +35,20 @@ class Response {
             'oai' => 'http://www.openarchives.org/OAI/2.0/',
         ));
 
-        // See: http://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
-        $e = $this->response->first('/oai:error');
-        if ($e) {
-            $this->error = $e->text();
+        /* Possible error codes:
+            badArgument
+            badResumptionToken
+            badVerb
+            cannotDisseminateFormat
+            idDoesNotExist
+            noRecordsMatch
+            noMetaDataFormats
+            noSetHierarchy
+           http://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
+        */
+        $err = $this->response->first('/oai:OAI-PMH/oai:error');
+        if ($err) {
+            throw new BadRequestError($err->attr('code') . ' : ' . $err->text());
         }
     }
 

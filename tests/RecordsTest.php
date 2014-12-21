@@ -1,8 +1,5 @@
 <?php namespace Scriptotek\Oai;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Mockery as m;
-
 class RecordsTest extends TestCase {
 
     protected $listRecordsTpl = '
@@ -19,10 +16,6 @@ class RecordsTest extends TestCase {
 		  <error code="badArgument">unknown set name: norgessoks</error> 
 		</OAI-PMH>
 		';
-
-    protected function tearDown() {
-        m::close();
-    }
 
 	/**
      *  numberOfRecords : Total number of records in response
@@ -74,10 +67,8 @@ class RecordsTest extends TestCase {
 		$client = new Client($uri, null, $http);
 		$records = new Records($args['from'], $args['until'], $args['set'], $client);
 
-		$this->assertNull($records->error);
 		$this->assertEquals(8, $records->numberOfRecords);
 		$records->rewind();
-		$this->assertNull($records->error);
 
 		$this->assertEquals(1, $records->key());
 		$this->assertTrue($records->valid());
@@ -109,7 +100,6 @@ class RecordsTest extends TestCase {
 		$client = new Client($uri, null, $http);
 		$records = new Records($args['from'], $args['until'], $args['set'], $client);
 
-		$this->assertNull($records->error);
 		$records->next();
 		$records->rewind();
 		$records->next();
@@ -121,8 +111,11 @@ class RecordsTest extends TestCase {
 		$this->assertEquals($n, $i);
 	}
 
-
-	public function testErrorResponse()
+	/**
+     * @expectedException Scriptotek\Oai\BadRequestError
+     * @expectedExceptionMessage badArgument : unknown set name: norgessoks
+     */
+	public function testBadRequest()
 	{
 		$uri = 'http://localhost';
 		$args = array(
@@ -134,9 +127,6 @@ class RecordsTest extends TestCase {
 
 		$client = new Client($uri, null, $http);
 		$records = new Records($args['from'], $args['until'], $args['set'], $client);
-
-		$this->assertEquals('unknown set name: norgessoks', $records->error);
-		$this->assertEquals('badArgument', $records->errorCode);
 	}
 
 	/*public function testMultipleRequests()

@@ -169,7 +169,7 @@ class Client extends EventEmitter {
             }
             $attempt++;
             if ($attempt > $this->maxRetries) {
-                throw new ResponseException('Failed to get a response from the server.');
+                throw new ConnectionError('Failed to get a response from the server. Max retries (' . $this->maxRetries . ') exceeded.');
             }
         }
         $body = $res->getBody(true);
