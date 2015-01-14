@@ -87,6 +87,16 @@ class Records extends EventEmitter implements \Iterator {
 	}
 
 	/**
+     * Return the last response object
+     *
+     * @return ListRecordsResponse|null
+     */
+	public function getLastResponse()
+	{
+		return $this->lastResponse;
+	}
+
+	/**
      * Fetch more records from the service
      */
 	private function fetchMore()
