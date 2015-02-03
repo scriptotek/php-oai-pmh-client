@@ -142,7 +142,7 @@ class Records extends EventEmitter implements \Iterator {
 		if (isset($this->lastResponse->resumptionToken)) {
 			$this->resumptionToken = $this->lastResponse->resumptionToken;
 		} else {
-			// $this->resumptionToken = null;
+			$this->resumptionToken = null;
 		}
 
 	}
