@@ -1,9 +1,9 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
  
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
- * Generic OAI response
+ * Generic OAI-PMH response
  */
 class Response {
 
@@ -13,14 +13,14 @@ class Response {
     /** @var QuiteSimpleXMLElement XML response */
     protected $response;
 
-    /** @var Client Reference to OAI client object */
+    /** @var Client Reference to OAI-PMH client object */
     protected $client;
 
     /**
      * Create a new response
      *
      * @param string $text Raw XML response
-     * @param Client $client OAI client reference (optional)
+     * @param Client $client OAI-PMH client reference (optional)
      */
     public function __construct($text, &$client = null)
     {

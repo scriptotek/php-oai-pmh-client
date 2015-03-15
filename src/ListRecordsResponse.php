@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 /**
  * ListRecords response, containing a list of records or some error
@@ -21,7 +21,7 @@ class ListRecordsResponse extends Response {
      * Create a new ListRecords response
      *
      * @param string $text Raw XML response
-     * @param Client $client OAI client reference (optional)
+     * @param Client $client OAI-PMH client reference (optional)
      */
     public function __construct($text, &$client = null)
     {

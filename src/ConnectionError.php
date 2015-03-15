@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 /**
  * Thrown after a configurable number of retries

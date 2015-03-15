@@ -1,8 +1,8 @@
 {
-    "name": "scriptotek/oai-client",
+    "name": "scriptotek/oai-pmh-client",
     "type": "library",
     "description": "Package for harvesting data from OAI-PMH repositories",
-    "homepage": "http://github.com/scriptotek/oai-client",
+    "homepage": "https://github.com/scriptotek/php-oai-pmh-client",
     "keywords": ["OAI-PMH"],
     "require": {
         "php": ">=5.3",
@@ -24,16 +24,16 @@
         }
     ],
     "support": {
-        "issues": "http://github.com/scriptotek/oai-client/issues"
+        "issues": "https://github.com/scriptotek/php-oai-pmh-client/issues"
     },
     "autoload": {
         "psr-4": {
-            "Scriptotek\\Oai\\": "src/"
+            "Scriptotek\\OaiPmh\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Scriptotek\\Oai\\": "tests/"
+            "Scriptotek\\OaiPmh\\": "tests/"
         }
     },
     "minimum-stability": "dev"

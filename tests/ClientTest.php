@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Guzzle\Http\Exception\BadResponseException as BadResponseException;
@@ -25,7 +25,7 @@ class ClientTest extends TestCase {
         $cli1 = new Client($this->url);
 
         $this->assertEquals('marcxchange', $cli1->schema);
-        $this->assertEquals('php-oai-client', $cli1->userAgent);
+        $this->assertEquals('php-oaipmh-client', $cli1->userAgent);
         $this->assertNull($cli1->credentials);
         $this->assertNull($cli1->proxy);
         $this->assertEquals(12, $cli1->maxRetries);
@@ -91,7 +91,7 @@ class ClientTest extends TestCase {
     {
         $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
         $http = $this->httpMockSingleResponse($body);
-        $mock = m::mock('Scriptotek\Oai\Client[emit]', array('nowhere', null, $http));
+        $mock = m::mock('Scriptotek\OaiPmh\Client[emit]', array('nowhere', null, $http));
 
         $mock->shouldReceive('emit')
             ->with('request.start', array('verb' => 'GetRecord', 'arguments' => array('identifier' => 'test')))

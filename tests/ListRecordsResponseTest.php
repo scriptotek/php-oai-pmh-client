@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 class ListRecordsResponseTest extends TestCase {
 

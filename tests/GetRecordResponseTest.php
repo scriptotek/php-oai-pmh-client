@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 class GetRecordResponseTest extends TestCase {
 
@@ -21,7 +21,7 @@ class GetRecordResponseTest extends TestCase {
 				</GetRecord>
 			</OAI-PMH>');
 
-		$this->assertInstanceOf('Scriptotek\Oai\Record', $res->record);
+		$this->assertInstanceOf('Scriptotek\OaiPmh\Record', $res->record);
 	}
 
 }

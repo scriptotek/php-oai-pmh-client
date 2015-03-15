@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 use \Guzzle\Http\Message\Response as HttpResponse;
 use \Mockery as m;

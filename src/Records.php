@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 use Evenement\EventEmitter;
 /**
@@ -45,7 +45,7 @@ class Records extends EventEmitter implements \Iterator {
      * @param string $from Start date
      * @param string $until End date
      * @param string $set Data set
-     * @param Client $client OAI client reference
+     * @param Client $client OAI-PMH client reference
      * @param string $resumptionToken
      * @param array $extraParams Extra GET parameters (optional)
      */

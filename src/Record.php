@@ -1,9 +1,9 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
  
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
- * Single record from a OAI response
+ * Single record from a OAI-PMH response
  */
 class Record {
 

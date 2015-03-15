@@ -1,8 +1,10 @@
-[![Build Status](https://img.shields.io/travis/scriptotek/php-oai-client.svg)](https://travis-ci.org/scriptotek/php-oai-client)
-[![Coverage Status](https://img.shields.io/coveralls/scriptotek/php-oai-client.svg)](https://coveralls.io/r/scriptotek/php-oai-client?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scriptotek/php-oai-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scriptotek/php-oai-client/?branch=master)
+[![Build Status](http://img.shields.io/travis/scriptotek/php-oai-pmh-client.svg?style=flat-square)](https://travis-ci.org/scriptotek/php-oai-pmh-client)
+[![Coverage Status](http://img.shields.io/coveralls/scriptotek/php-oai-pmh-client.svg?style=flat-square)](https://coveralls.io/r/scriptotek/php-oai-pmh-client?branch=master)
+[![Code Quality](http://img.shields.io/scrutinizer/g/scriptotek/php-oai-pmh-client/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/scriptotek/php-oai-pmh-client/?branch=master)
+[![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
+[![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
 
-## php-oai-client
+## php-oai-pmh-client
 
 Simple PHP client package for fetching data from an OAI-PMH server, using the 
 [Guzzle HTTP client](http://guzzlephp.org/). The returned data is parsed by
@@ -14,27 +16,19 @@ a `ConnectionError`.
 
 ### Install using Composer
 
-Add the package to the `require` list of your `composer.json` file.
-
-```json
-{
-    "require": {
-        "scriptotek/oai-client": "dev-master"
-    },
-}
-``` 
-
-and run `composer install` to get the latest version of the package.
+```
+composer require scriptotek/oai-client
+```
 
 ### Example
 
 ```php
 require_once('vendor/autoload.php');
-use Scriptotek\Oai\Client as OaiClient;
+use Scriptotek\OaiPmh\Client as OaiPmhClient;
 
 $url = 'http://oai.bibsys.no/repository';
 
-$client = new OaiClient($url, array(
+$client = new OaiPmhClient($url, array(
     'schema' => 'marcxchange',
     'user-agent' => 'MyTool/0.1',
     'max-retries' => 10,
@@ -47,10 +41,10 @@ $client = new OaiClient($url, array(
 ```php
 try {
     $record = $client->record('oai:bibsys.no:biblio:113889372');
-} catch (Scriptotek\Oai\ConnectionError $e) {
+} catch (Scriptotek\OaiPmh\ConnectionError $e) {
     echo $e->getMsg();
     die;
-} catch (Scriptotek\Oai\BadRequestError $e) {
+} catch (Scriptotek\OaiPmh\BadRequestError $e) {
     echo 'Bad request: ' . $e->getMsg() . "\n";
     die;
 }
@@ -90,4 +84,4 @@ which is included in the dev requirements of `composer.json`.
 
     php vendor/bin/sami.php update sami.config.php -v
 
-You can view it at [scriptotek.github.io/php-oai-client](//scriptotek.github.io/php-oai-client/)
+You can view it at [scriptotek.github.io/php-oai-pmh-client](//scriptotek.github.io/php-oai-pmh-client/)

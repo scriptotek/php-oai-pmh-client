@@ -1,10 +1,10 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 
 class ResponseTest extends TestCase {
 
 	/**
-     * @expectedException Scriptotek\Oai\BadRequestError
+     * @expectedException Scriptotek\OaiPmh\BadRequestError
      * @expectedExceptionMessage badArgument : Illegal ientifier.
      */
 	public function testError()

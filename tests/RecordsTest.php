@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
 
 class RecordsTest extends TestCase {
 
@@ -112,7 +112,7 @@ class RecordsTest extends TestCase {
 	}
 
 	/**
-     * @expectedException Scriptotek\Oai\BadRequestError
+     * @expectedException Scriptotek\OaiPmh\BadRequestError
      * @expectedExceptionMessage badArgument : unknown set name: norgessoks
      */
 	public function testBadRequest()

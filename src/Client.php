@@ -1,4 +1,4 @@
-<?php namespace Scriptotek\Oai;
+<?php namespace Scriptotek\OaiPmh;
  
 use \Guzzle\Http\Client as HttpClient;
 use \Evenement\EventEmitter;
@@ -59,7 +59,7 @@ class Client extends EventEmitter {
     /**
      * Create a new client
      *
-     * @param string $url Base URL to the OAI service
+     * @param string $url Base URL to the OAI-PMH service
      * @param array $options Associative array of options
      * @param HttpClient $httpClient
      */
@@ -69,7 +69,7 @@ class Client extends EventEmitter {
         $this->httpClient = $httpClient ?: new HttpClient;
 
         $this->schema = $this->array_get($options, 'schema', 'marcxchange');
-        $this->userAgent = $this->array_get($options, 'user-agent', 'php-oai-client');
+        $this->userAgent = $this->array_get($options, 'user-agent', 'php-oaipmh-client');
         $this->credentials = $this->array_get($options, 'credentials');
         $this->proxy = $this->array_get($options, 'proxy');
         $this->maxRetries = $this->array_get($options, 'max-retries', 12);
@@ -114,10 +114,10 @@ class Client extends EventEmitter {
     }
 
     /**
-     * Construct the URL for an OAI query
+     * Construct the URL for an OAI-PMH query
      *
-     * @param string $verb The OAI verb
-     * @param array $arguments OAI arguments
+     * @param string $verb The OAI-PMH verb
+     * @param array $arguments OAI-PMH arguments
      * @return string
      */
     public function urlBuilder($verb, $arguments = array())
@@ -135,10 +135,10 @@ class Client extends EventEmitter {
     }
 
     /**
-     * Perform a single OAI request
+     * Perform a single OAI-PMH request
      *
-     * @param string $verb The OAI verb
-     * @param array $arguments OAI arguments
+     * @param string $verb The OAI-PMH verb
+     * @param array $arguments OAI-PMH arguments
      * @return string
      */
     public function request($verb, $arguments)
