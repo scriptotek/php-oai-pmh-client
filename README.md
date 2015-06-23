@@ -17,7 +17,7 @@ a `ConnectionError`.
 ### Install using Composer
 
 ```
-composer require scriptotek/oai-client
+composer require scriptotek/oai-pmh-client
 ```
 
 ### Example
