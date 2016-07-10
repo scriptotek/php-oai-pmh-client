@@ -15,7 +15,7 @@ class Client extends EventEmitter {
     protected $httpClient;
 
     /** @var string OAI service base URL */
-    protected $url;
+    public $url;
 
     /** @var string Requested schema for the returned records */
     public $schema;
