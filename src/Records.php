@@ -101,13 +101,16 @@ class Records extends EventEmitter implements \Iterator {
      */
 	private function fetchMore()
 	{
-		$args = array(
-			'from' => $this->from,
-			'until' => $this->until,
-			'set' => $this->set,
-		);
-		if (!is_null($this->resumptionToken)) {
-			$args['resumptionToken'] = $this->resumptionToken;
+		if (is_null($this->resumptionToken)) {
+			$args = array(
+				'from' => $this->from,
+				'until' => $this->until,
+				'set' => $this->set,
+			);
+		} else {
+			$args = array(
+				'resumptionToken' => $this->resumptionToken,
+			);
 		}
 
 		$attempt = 0;
