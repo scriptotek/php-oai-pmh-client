@@ -129,6 +129,10 @@ class Client extends EventEmitter {
 
         foreach ($arguments as $key => $value) {
             $qs[$key] = $value;
+            if (is_null($value)) {
+                // Allow removal of default arguments like 'metadataPrefix'
+                unset($qs[$key]);
+            }
         }
 
         return $this->url . '?' . http_build_query($qs);

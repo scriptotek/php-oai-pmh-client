@@ -110,6 +110,7 @@ class Records extends EventEmitter implements \Iterator {
 		} else {
 			$args = array(
 				'resumptionToken' => $this->resumptionToken,
+				'metadataPrefix' => null,
 			);
 		}
 
