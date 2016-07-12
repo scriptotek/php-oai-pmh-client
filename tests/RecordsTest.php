@@ -67,7 +67,7 @@ class RecordsTest extends TestCase {
 		$client = new Client($uri, null, $http);
 		$records = new Records($args['from'], $args['until'], $args['set'], $client);
 
-		$this->assertEquals(8, $records->numberOfRecords);
+		$this->assertNull($records->numberOfRecords);
 		$records->rewind();
 
 		$this->assertEquals(1, $records->key());

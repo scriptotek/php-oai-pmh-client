@@ -34,8 +34,10 @@ class Records extends EventEmitter implements \Iterator {
 	private $resumptionToken;
 	private $initialResumptionToken;
 
-    /** @var int Total number of records in the result set */
-    public $numberOfRecords;
+	/** @var int Total number of records in the result set. Only defined if the
+	    server returns 'completeListSize', which is optional. Even if defined, the
+	    value may still be only an estimate. */
+	public $numberOfRecords = null;
 
 	private $data = array();
 
@@ -135,12 +137,11 @@ class Records extends EventEmitter implements \Iterator {
 
 		$this->data = $this->lastResponse->records;
 
-		if (isset($this->lastResponse->numberOfRecords) && !is_null($this->lastResponse->numberOfRecords)) {
+		if (!is_null($this->lastResponse->numberOfRecords)) {
 			$this->numberOfRecords = $this->lastResponse->numberOfRecords;
-			$this->position = $this->lastResponse->cursor + 1;
-
-		} else if (!isset($this->numberOfRecords)) {
-			$this->numberOfRecords = count($this->lastResponse->records);
+			if (!is_null($this->lastResponse->cursor)) {
+				$this->position = $this->lastResponse->cursor + 1;
+			}
 		}
 
 		if (isset($this->lastResponse->resumptionToken)) {
