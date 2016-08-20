@@ -1,7 +1,7 @@
 <?php namespace Scriptotek\OaiPmh;
- 
-use \Guzzle\Http\Client as HttpClient;
-use \Evenement\EventEmitter;
+
+use GuzzleHttp\Client as HttpClient;
+use Evenement\EventEmitter;
 
 /**
  * OAI client
@@ -85,6 +85,7 @@ class Client extends EventEmitter {
     public function getHttpOptions()
     {
         $options = array(
+            'headers' => $this->getHttpHeaders(),
             'connect_timeout' => $this->timeout,
             'timeout' => $this->timeout,
         );
@@ -155,10 +156,7 @@ class Client extends EventEmitter {
         $attempt = 0;
         while (true) {
             try {
-                $res = $this->httpClient->get($url, 
-                    $this->getHttpHeaders(),
-                    $this->getHttpOptions()
-                )->send();
+                $res = $this->httpClient->get($url, $this->getHttpOptions());
                 break;
             } catch (\Guzzle\Http\Exception\RequestException $e) {
                 $this->emit('request.error', array(
@@ -176,7 +174,7 @@ class Client extends EventEmitter {
                 throw new ConnectionError('Failed to get a response from the server. Max retries (' . $this->maxRetries . ') exceeded.');
             }
         }
-        $body = $res->getBody(true);
+        $body = (string) $res->getBody();
         $this->emit('request.complete', array(
             'verb' => $verb,
             'arguments' => $arguments,

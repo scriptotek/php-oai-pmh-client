@@ -1,8 +1,11 @@
 <?php namespace Scriptotek\OaiPmh;
 
-use \Guzzle\Http\Message\Response as HttpResponse;
-use \Guzzle\Http\Exception\BadResponseException as BadResponseException;
-use \Mockery as m;
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response as HttpResponse;
+use Mockery as m;
 
 class ClientTest extends TestCase {
 
@@ -68,23 +71,24 @@ class ClientTest extends TestCase {
 
     public function testResumptionTokenIsSentToHttpClient()
     {
-        $resumptionToken = 'dasdsa93123jkldasjkl23';
-        $http = m::mock();
-
-        $http->shouldReceive('get')
-            ->once()
-            ->with("/$resumptionToken/", m::any(), m::any())
-            ->andReturn($http);
-
         $body = str_replace('{{main}}', '<request verb="GetRecord">oai.bibsys.no/repository</request>', $this->baseTpl);
 
-        $http->shouldReceive('send')
-            ->once()
-            ->andReturn(new HttpResponse(200, null, $body));
+        $handlers = new MockHandler([
+            new HttpResponse(200, [], $body),
+        ]);
+        $stack = HandlerStack::create($handlers);
+        $transactions = [];
+        $history = Middleware::history($transactions);
+        $stack->push($history);
+        $http = new HttpClient(['handler' => $stack]);
 
-        $cli = new Client('nowhere', null, $http);
+        $resumptionToken = 'dasdsa93123jkldasjkl23';
+
+        $cli = new Client('http://test', null, $http);
         $cli->records('2012-01-01', '2012-01-02', 'set', $resumptionToken);
 
+        $this->assertEquals(1, count($transactions));
+        $this->assertContains("resumptionToken=$resumptionToken", $transactions[0]['request']->getUri()->getQuery());
     }
 
     public function testRequestEventsAreSent()
@@ -114,7 +118,7 @@ class ClientTest extends TestCase {
     //     $request = m::mock();
     //     $request->shouldReceive('send')
     //         ->once()
-    //         ->andReturn(new HttpResponse(200, null, $body));
+    //         ->andReturn(new HttpResponse(200, array(), $body));
 
     //     $this->n = 0;
 

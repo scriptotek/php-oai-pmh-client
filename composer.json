@@ -5,16 +5,15 @@
     "homepage": "https://github.com/scriptotek/php-oai-pmh-client",
     "keywords": ["OAI-PMH"],
     "require": {
-        "php": ">=5.3",
-        "danmichaelo/quitesimplexmlelement": "~0.2",
-        "guzzle/guzzle": "~3.8",
-        "evenement/evenement": "1.0.*"
+        "php": ">=5.5",
+        "danmichaelo/quitesimplexmlelement": "~0.4",
+        "guzzlehttp/guzzle": "~6.0",
+        "evenement/evenement": "~2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "satooshi/php-coveralls": "~0.6",
+        "phpunit/phpunit": "~4.8|~5.5",
         "mockery/mockery": "~0.9",
-        "sami/sami": "~1.4"
+        "sami/sami": "~3.3"
     },
     "license": "MIT",
     "authors": [
@@ -35,6 +34,5 @@
         "psr-4": {
             "Scriptotek\\OaiPmh\\": "tests/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
