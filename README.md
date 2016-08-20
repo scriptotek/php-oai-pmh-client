@@ -1,5 +1,5 @@
-[![Build Status](http://img.shields.io/travis/scriptotek/php-oai-pmh-client.svg?style=flat-square)](https://travis-ci.org/scriptotek/php-oai-pmh-client)
-[![Coverage Status](http://img.shields.io/coveralls/scriptotek/php-oai-pmh-client.svg?style=flat-square)](https://coveralls.io/r/scriptotek/php-oai-pmh-client?branch=master)
+[![Build Status](http://img.shields.io/travis/scriptotek/php-oai-pmh-client/master.svg?style=flat-square)](https://travis-ci.org/scriptotek/php-oai-pmh-client)
+[![Coverage](https://img.shields.io/codecov/c/github/scriptotek/php-oai-pmh-client/master.svg?style=flat-square)](https://codecov.io/gh/scriptotek/php-oai-pmh-client)
 [![Code Quality](http://img.shields.io/scrutinizer/g/scriptotek/php-oai-pmh-client/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/scriptotek/php-oai-pmh-client/?branch=master)
 [![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
 [![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
