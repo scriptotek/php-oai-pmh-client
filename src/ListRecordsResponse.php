@@ -3,7 +3,8 @@
 /**
  * ListRecords response, containing a list of records or some error
  */
-class ListRecordsResponse extends Response {
+class ListRecordsResponse extends Response
+{
  
     /** @var Record[] Array of records */
     public $records;
@@ -30,14 +31,18 @@ class ListRecordsResponse extends Response {
         $this->records = array();
 
         $records = $this->response->first('/oai:OAI-PMH/oai:ListRecords');
-        if (!$records) return;
+        if (!$records) {
+            return;
+        }
 
         foreach ($records->xpath('oai:record') as $record) {
             $this->records[] = new Record($record);
         }
 
         $resumptionToken = $records->first('oai:resumptionToken');
-        if (!$resumptionToken) return;
+        if (!$resumptionToken) {
+            return;
+        }
 
         $this->resumptionToken = $resumptionToken->text();
         
@@ -49,6 +54,4 @@ class ListRecordsResponse extends Response {
             $this->cursor = intval($resumptionToken->attr('cursor'));
         }
     }
-
 }
-

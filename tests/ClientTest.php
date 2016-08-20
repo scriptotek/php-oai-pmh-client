@@ -7,7 +7,8 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response as HttpResponse;
 use Mockery as m;
 
-class ClientTest extends TestCase {
+class ClientTest extends TestCase
+{
 
     protected $url = 'http://oai.my_fictive_host.net';
 
@@ -19,7 +20,8 @@ class ClientTest extends TestCase {
             <sru:explainResponse xmlns:sru="http://www.loc.gov/zing/srw/">
             </sru:explainResponse>';
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         m::close();
     }
 
@@ -150,6 +152,4 @@ class ClientTest extends TestCase {
 
     //     $mock->record('test');
     // }
-
 }
-

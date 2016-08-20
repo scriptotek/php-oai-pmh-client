@@ -1,9 +1,10 @@
 <?php namespace Scriptotek\OaiPmh;
- 
+
 /**
  * GetRecord response, containing a single record or some error
  */
-class GetRecordResponse extends Response {
+class GetRecordResponse extends Response
+{
 
     /** @var Record Single record */
     public $record;
@@ -30,6 +31,4 @@ class GetRecordResponse extends Response {
         $rec = $this->response->first('/oai:OAI-PMH/oai:GetRecord/oai:record');
         $this->record = $rec ? new Record($rec) : null;
     }
-
 }
-

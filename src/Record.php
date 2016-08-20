@@ -1,11 +1,12 @@
 <?php namespace Scriptotek\OaiPmh;
- 
+
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
  * Single record from a OAI-PMH response
  */
-class Record {
+class Record
+{
 
     /** @var string */
     public $identifier;
@@ -27,5 +28,4 @@ class Record {
         $this->datestamp = $doc->text('oai:header/oai:datestamp');
         $this->data = $doc->first('oai:metadata');
     }
-
 }

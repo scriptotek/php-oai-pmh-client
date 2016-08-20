@@ -1,11 +1,12 @@
 <?php namespace Scriptotek\OaiPmh;
- 
+
 use Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement;
 
 /**
  * Generic OAI-PMH response
  */
-class Response {
+class Response
+{
 
     /** @var string Raw XML response */
     protected $rawResponse;
@@ -61,6 +62,4 @@ class Response {
     {
         return $this->rawResponse;
     }
-
 }
-

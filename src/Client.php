@@ -6,7 +6,8 @@ use Evenement\EventEmitter;
 /**
  * OAI client
  */
-class Client extends EventEmitter {
+class Client extends EventEmitter
+{
 
     // When we no longer need to support PHP 5.3:
     // - Upgrade to Evenement 2.0 and use trait instead of extending
@@ -209,5 +210,4 @@ class Client extends EventEmitter {
     {
         return new Records($from, $until, $set, $this, $resumptionToken, $extraParams);
     }
-
 }

@@ -3,7 +3,8 @@
 use GuzzleHttp\Psr7\Response as HttpResponse;
 use Mockery as m;
 
-class TestCase extends \PHPUnit_Framework_TestCase {
+class TestCase extends \PHPUnit_Framework_TestCase
+{
 
     protected $recordTpl = '
       <record>
@@ -48,14 +49,16 @@ class TestCase extends \PHPUnit_Framework_TestCase {
      */
     public function array_get($array, $key, $default = null)
     {
-        if (is_null($key)) return $array;
+        if (is_null($key)) {
+            return $array;
+        }
 
-        if (isset($array[$key])) return $array[$key];
+        if (isset($array[$key])) {
+            return $array[$key];
+        }
 
-        foreach (explode('.', $key) as $segment)
-        {
-            if ( ! is_array($array) or ! array_key_exists($segment, $array))
-            {
+        foreach (explode('.', $key) as $segment) {
+            if (! is_array($array) or ! array_key_exists($segment, $array)) {
                 return $default;
             }
 
@@ -65,19 +68,20 @@ class TestCase extends \PHPUnit_Framework_TestCase {
         return $array;
     }
 
-    function randStr($length){ 
-        $randstr = ""; 
-        for($i=0; $i<$length; $i++){ 
-            $randnum = mt_rand(0,61); 
-            if($randnum < 10){ 
-                $randstr .= chr($randnum+48); 
-            }else if($randnum < 36){ 
-                $randstr .= chr($randnum+55); 
-            }else{ 
-                $randstr .= chr($randnum+61); 
-            } 
+    public function randStr($length)
+    {
+        $randstr = "";
+        for ($i=0; $i<$length; $i++) {
+            $randnum = mt_rand(0, 61);
+            if ($randnum < 10) {
+                $randstr .= chr($randnum+48);
+            } elseif ($randnum < 36) {
+                $randstr .= chr($randnum+55);
+            } else {
+                $randstr .= chr($randnum+61);
+            }
         }
-        return $randstr; 
+        return $randstr;
     }
 
     /**
@@ -101,11 +105,10 @@ class TestCase extends \PHPUnit_Framework_TestCase {
         $http = m::mock();
         $http->shouldReceive('get')
             ->times(count($responses))
-            ->andReturnValues(array_map(function($r) {
+            ->andReturnValues(array_map(function ($r) {
                 return new HttpResponse(200, array(), $r);
             }, $responses));
 
         return $http;
     }
 }
-

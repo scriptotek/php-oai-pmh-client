@@ -1,10 +1,11 @@
 <?php namespace Scriptotek\OaiPmh;
 
-class ListRecordsResponseTest extends TestCase {
+class ListRecordsResponseTest extends TestCase
+{
 
-	public function testNormalResponse()
-	{
-		$res = new ListRecordsResponse('<?xml version="1.0" encoding="UTF-8" ?>
+    public function testNormalResponse()
+    {
+        $res = new ListRecordsResponse('<?xml version="1.0" encoding="UTF-8" ?>
 			<OAI-PMH  xmlns="http://www.openarchives.org/OAI/2.0/"
 			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 			 xmlns:dc="http://purl.org/dc/terms/" 
@@ -33,11 +34,9 @@ class ListRecordsResponseTest extends TestCase {
 			</ListRecords>
 			</OAI-PMH>');
 
-		$this->assertCount(1, $res->records);
-		$this->assertEquals('lr~sesam~~~oai_dc~1020~459345~9351', $res->resumptionToken);
-		$this->assertEquals(1020, $res->cursor);
-		$this->assertEquals(459345, $res->numberOfRecords);
-
-	}
-
+        $this->assertCount(1, $res->records);
+        $this->assertEquals('lr~sesam~~~oai_dc~1020~459345~9351', $res->resumptionToken);
+        $this->assertEquals(1020, $res->cursor);
+        $this->assertEquals(459345, $res->numberOfRecords);
+    }
 }
