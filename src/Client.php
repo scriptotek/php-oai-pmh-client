@@ -43,7 +43,7 @@ class Client extends EventEmitter
     public $maxRetries;
 
     /**
-     * @var integer Sleep time in seconds before retrying when getting an errorneous response
+     * @var float Sleep time in seconds before retrying when getting an errorneous response
      */
     public $sleepTimeOnError;
 
@@ -73,8 +73,8 @@ class Client extends EventEmitter
         $this->userAgent = $this->array_get($options, 'user-agent', 'php-oaipmh-client');
         $this->credentials = $this->array_get($options, 'credentials');
         $this->proxy = $this->array_get($options, 'proxy');
-        $this->maxRetries = $this->array_get($options, 'max-retries', 12);
-        $this->sleepTimeOnError = $this->array_get($options, 'sleep-time-on-error', 20);
+        $this->maxRetries = $this->array_get($options, 'max-retries', 30);
+        $this->sleepTimeOnError = $this->array_get($options, 'sleep-time-on-error', 1.0);
         $this->timeout = $this->array_get($options, 'timeout', 60.0);
     }
 
@@ -163,12 +163,12 @@ class Client extends EventEmitter
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep($this->sleepTimeOnError);
             } catch (\Guzzle\Http\Exception\CurlException $e) {
+                time_nanosleep(intval($this->sleepTimeOnError), intval($this->sleepTimeOnError * 1000000000));
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-                sleep($this->sleepTimeOnError);
+                time_nanosleep(intval($this->sleepTimeOnError), intval($this->sleepTimeOnError * 1000000000));
             }
             $attempt++;
             if ($attempt > $this->maxRetries) {

@@ -135,7 +135,7 @@ class Records extends EventEmitter implements \Iterator
                     // Give up
                     throw new ConnectionError('Failed to get a valid XML response from the server.', null, $e);
                 }
-                sleep($this->client->sleepTimeOnError);
+                time_nanosleep(intval($this->client->sleepTimeOnError), intval($this->client->sleepTimeOnError * 1000000000));
             }
         }
 
