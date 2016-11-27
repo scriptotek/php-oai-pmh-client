@@ -28,7 +28,6 @@ class Records extends EventEmitter implements \Iterator
     private $until;
     private $set;
     private $client;
-    private $extraParams;
     private $lastResponse;
 
     private $position;
@@ -51,9 +50,8 @@ class Records extends EventEmitter implements \Iterator
      * @param string $set Data set
      * @param Client $client OAI-PMH client reference
      * @param string $resumptionToken
-     * @param array $extraParams Extra GET parameters (optional)
      */
-    public function __construct($from, $until, $set, Client $client, $resumptionToken = null, $extraParams = array())
+    public function __construct($from, $until, $set, Client $client, $resumptionToken = null)
     {
         $this->from = $from;
         $this->until = $until;
@@ -61,7 +59,6 @@ class Records extends EventEmitter implements \Iterator
         $this->client = $client;
         $this->resumptionToken = $resumptionToken;
 
-        $this->extraParams = $extraParams;
         $this->position = 1;
         $this->fetchMore();
 

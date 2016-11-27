@@ -20,9 +20,9 @@ class Record
     /**
      * Create a new record
      *
-     * @param Danmichaelo\QuiteSimpleXMLElement\QuiteSimpleXMLElement $doc
+     * @param QuiteSimpleXMLElement $doc
      */
-    public function __construct($doc)
+    public function __construct(QuiteSimpleXMLElement $doc)
     {
         $this->identifier = $doc->text('oai:header/oai:identifier');
         $this->datestamp = $doc->text('oai:header/oai:datestamp');

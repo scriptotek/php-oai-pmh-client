@@ -52,7 +52,7 @@ class Client extends EventEmitter
      */
     public $timeout;
 
-    public function array_get($arr, $key, $default = null)
+    protected function arrayGet($arr, $key, $default = null)
     {
         return (isset($arr[$key])) ? $arr[$key] : $default;
     }
@@ -69,13 +69,13 @@ class Client extends EventEmitter
         $this->url = $url;
         $this->httpClient = $httpClient ?: new HttpClient;
 
-        $this->schema = $this->array_get($options, 'schema', 'marcxchange');
-        $this->userAgent = $this->array_get($options, 'user-agent', 'php-oaipmh-client');
-        $this->credentials = $this->array_get($options, 'credentials');
-        $this->proxy = $this->array_get($options, 'proxy');
-        $this->maxRetries = $this->array_get($options, 'max-retries', 30);
-        $this->sleepTimeOnError = $this->array_get($options, 'sleep-time-on-error', 1.0);
-        $this->timeout = $this->array_get($options, 'timeout', 60.0);
+        $this->schema = $this->arrayGet($options, 'schema', 'marcxchange');
+        $this->userAgent = $this->arrayGet($options, 'user-agent', 'php-oaipmh-client');
+        $this->credentials = $this->arrayGet($options, 'credentials');
+        $this->proxy = $this->arrayGet($options, 'proxy');
+        $this->maxRetries = $this->arrayGet($options, 'max-retries', 30);
+        $this->sleepTimeOnError = $this->arrayGet($options, 'sleep-time-on-error', 1.0);
+        $this->timeout = $this->arrayGet($options, 'timeout', 60.0);
     }
 
     /**
@@ -146,6 +146,7 @@ class Client extends EventEmitter
      * @param string $verb The OAI-PMH verb
      * @param array $arguments OAI-PMH arguments
      * @return string
+     * @throws ConnectionError
      */
     public function request($verb, $arguments)
     {
@@ -159,12 +160,14 @@ class Client extends EventEmitter
             try {
                 $res = $this->httpClient->get($url, $this->getHttpOptions());
                 break;
-            } catch (\Guzzle\Http\Exception\RequestException $e) {
+            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+                // Thrown in case of a networking error (connection timeout, DNS errors, etc.)
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
-            } catch (\Guzzle\Http\Exception\CurlException $e) {
                 time_nanosleep(intval($this->sleepTimeOnError), intval($this->sleepTimeOnError * 1000000000));
+            } catch (\GuzzleHttp\Exception\ServerException $e) {
+                // Thrown in case of 500 errors
                 $this->emit('request.error', array(
                     'message' => $e->getMessage(),
                 ));
@@ -188,7 +191,7 @@ class Client extends EventEmitter
      * Perform a GetRecord request
      *
      * @param string $identifier
-     * @return Record
+     * @return GetRecordResponse
      */
     public function record($identifier)
     {
