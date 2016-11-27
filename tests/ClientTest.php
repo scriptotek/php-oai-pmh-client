@@ -33,7 +33,7 @@ class ClientTest extends TestCase
         $this->assertEquals('php-oaipmh-client', $cli1->userAgent);
         $this->assertNull($cli1->credentials);
         $this->assertNull($cli1->proxy);
-        $this->assertEquals(12, $cli1->maxRetries);
+        $this->assertEquals(30, $cli1->maxRetries);
         $this->assertEquals(60.0, $cli1->timeout);
     }
 
