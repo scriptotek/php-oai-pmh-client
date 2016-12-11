@@ -4,6 +4,8 @@
 [![Latest Stable Version](http://img.shields.io/packagist/v/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
 [![Total Downloads](http://img.shields.io/packagist/dt/scriptotek/oai-pmh-client.svg?style=flat-square)](https://packagist.org/packages/scriptotek/oai-pmh-client)
 
+**Note**: This package is abandoned. I recommend using the [caseyamcl/phpoaipmh](https://github.com/caseyamcl/phpoaipmh) package instead. It has an almost identical interface, great code quality and more contributors, so I see no reason to continue maintaining this package.
+
 ## php-oai-pmh-client
 
 Simple PHP client package for fetching data from an OAI-PMH server, using the 
